@@ -1,0 +1,3 @@
+Allowed Sample Account:
+Account:0xCa7ed06C202477460B202C63A434232199FdDBAd
+Private Key: 28a867edadeb3dbaf175e8fca9042376ae846d6e79f520f2cdd1f15b4bd0d1df

@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login With Blockchain</title>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/froala_blocks.css' %}">
+    <script src="{% static 'js/forge.min.js' %}"></script>
+    <style>
+      .fdb-block {
+        border-bottom: 1px solid var(--light);
+      }
+    </style>
+  </head>
+  <body><style>
+  #navigator {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  #navigator .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+
+  @media (max-width: 720px) {
+    #navigator {
+      border-bottom: 1px solid #ccc;
+    }
+  }
+
+  #navigator a {
+    font-size: 14px;
+  }
+
+  #navigator+section {
+    padding: 250px 0;
+  }
+
+</style>
+
+    <!-- login Form -->
+    <section class="fdb-block bg-gray">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12  col-md-10 col-lg-8 col-xl-6 text-center">
+            <img alt="image" height="40" src="{% static '/imgs/layers.svg' %}">
+            <h1>Login With Blockchain</h1>
+            <p class="lead"> Buidling On The Ethereum Blockchain </p>
+			      <h6 class="text-dark mb-4">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class = "form-group">
+                    <div class ="alert alert-{{message.tags}} alert-dismissable" role ="alert">
+                    {{ message }}
+                    </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+            </h6>
+            <form method="POST" onsubmit="encryptPK()">
+            <div class="input-group mt-4 mb-4">
+			  
+			       {% csrf_token %}
+              <input type="text" id="privatekey" name="privatekey" class="form-control" placeholder="Enter your private key">
+              <div class="input-group-append">
+                <button class="btn btn-info" type="submit">Login</button>
+              </div>
+			      </form>
+            </div>
+            <p class="h5"><em>*Your private key is end-to-end encrypted</em></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script type="text/javascript">
+        function encryptPK(){
+        var public_key = forge.pki.publicKeyFromPem('{{public_key}}');
+        private_key = document.getElementById('privatekey').value
+        var encryptedKey = public_key.encrypt(private_key,"RSA-OAEP",{
+            md: forge.md.sha256.create(),
+            mgf1: forge.mgf1.create()
+        });
+        document.getElementById('privatekey').value = forge.util.encode64(encryptedKey);
+        console.log(private_key);
+        console.log(public_key);
+
+        return true;
+    }
+    </script>
+    
+    
+  </body>
+</html>
